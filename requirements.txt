@@ -1,0 +1,7 @@
+python-dotenv
+pyrogram
+tgcrypto
+pandas
+xlsxwriter
+deep-translator
+openai
