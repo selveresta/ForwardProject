@@ -22,4 +22,4 @@ class GPTClient:
         print(completion.choices[0].message)
 
 
-# gpt = GPTClient()
+gpt = None
