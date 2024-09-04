@@ -4,10 +4,8 @@ from pyrogram import Client
 from pyrogram import filters
 from config.config import API_HASH, API_ID, PHONE
 from channels.channels import (
-    source_destination_channels_map,
-    channel_name_Rektology,
-    group_comment_test,
-    groups_to_comment,
+    source_destination_channels_map as sdcm,
+    groups_to_comment as gtc,
 )
 from pyrogram import Client
 from pyrogram.types import Message
@@ -16,8 +14,6 @@ from pyrogram.errors.exceptions import MessageNotModified
 from api.GPTClient import gpt
 from pyrogram.handlers import MessageHandler
 from .handlers import forward_message_channel, send_comment_to_post
-
-channels = source_destination_channels_map
 
 
 class TelegramClient:
@@ -32,18 +28,57 @@ class TelegramClient:
     def start_client(self):
         self.client.run()
 
+    def get_channels_ids(self):
+        ids = []
+
+        for k, v in sdcm.items():
+            if v.get("from", None) and not v.get("users", None):
+                ids.append(v["from"])
+        return ids
+
+    def get_channels_ids_from_user(self):
+        ids = []
+        users = []
+
+        for k, v in sdcm.items():
+            if v.get("from", None) and v.get("users", None):
+                ids.append(v["from"])
+                users.append(v["users"])
+        return [ids, users]
+
+    def get_channels_to_comment(self):
+        ids = []
+
+        for k, v in gtc.items():
+            if v.get("id", None):
+                ids.append(v["id"])
+
+        return ids
+
     def register_client_handler(self):
+        ids = self.get_channels_ids()
+        ids_users = self.get_channels_ids_from_user()
+
+        comments_ids = self.get_channels_to_comment()
+
         self.client.add_handler(
             MessageHandler(
                 forward_message_channel,
-                filters=filters.chat(channels[channel_name_Rektology][0]),
+                filters=filters.chat(ids),
+            )
+        )
+
+        self.client.add_handler(
+            MessageHandler(
+                forward_message_channel,
+                filters=filters.chat(ids_users[0]) & filters.user(ids_users[1]),
             )
         )
 
         self.client.add_handler(
             MessageHandler(
                 send_comment_to_post,
-                filters=filters.chat(groups_to_comment[group_comment_test]["id"]),
+                filters=filters.chat(comments_ids),
             )
         )
 

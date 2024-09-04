@@ -1,45 +1,51 @@
 import asyncio
 
 from pyrogram import Client
-from pyrogram import filters
-from config.config import API_HASH, API_ID, PHONE
 from channels.channels import (
-    source_destination_channels_map,
-    channel_name_Rektology,
-    group_comment_test,
-    groups_to_comment,
+    source_destination_channels_map as sdcm,
 )
 from pyrogram import Client
 from pyrogram.types import Message
-from deep_translator import GoogleTranslator
 from pyrogram.errors.exceptions import MessageNotModified
-from api.GPTClient import gpt
-from pyrogram.handlers import MessageHandler
 
-channels = source_destination_channels_map
+
+def get_current_from(message: Message):
+    c_id = message.chat.id
+    for k, v in sdcm.items():
+        if c_id in v["from"]:
+            return v
+
+    return None
 
 
 async def forward_message_channel(client: Client, message: Message):
+    c_c = get_current_from(message)
+
+    if not c_c:
+        return
+
+    print(c_c)
+
     if message.media_group_id:
-        if not channels[channel_name_Rektology][2]:
-            channels[channel_name_Rektology][2] = True
+        if not c_c["mediaGroup"]:
+            c_c["mediaGroup"] = True
             await client.copy_media_group(
-                channels[channel_name_Rektology][1],
+                c_c["to"],
                 message.sender_chat.id,
                 message.id,
             )
 
             await asyncio.sleep(2)
-            channels[channel_name_Rektology][2] = False
+            c_c["mediaGroup"] = False
     else:
         message_new = await client.copy_message(
-            channels[channel_name_Rektology][1], message.sender_chat.id, message.id
+            c_c["to"], message.sender_chat.id, message.id
         )
 
         text = message_new.text if message_new.text else message_new.caption
         try:
             await client.edit_message_caption(
-                channels[channel_name_Rektology][1],
+                c_c["to"],
                 message_new.id,
                 text,
             )

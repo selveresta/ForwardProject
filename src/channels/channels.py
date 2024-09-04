@@ -1,11 +1,22 @@
-channel_name_Rektology = "Rektology"
+CN_Signals = "Signals"
 
 source_destination_channels_map = {
-    channel_name_Rektology: [
-        [-1002166434092],
-        -1002194746912,
-        False,
-    ],
+    CN_Signals: {
+        "from": -1002166434092,
+        "to": -1002244516241,
+        "mediaGroup": False,
+        "user": 6229293964,
+    },
+    "Rektology": {
+        "from": -1002191626337,
+        "to": -1002236146025,
+        "mediaGroup": False,
+    },
+    "News": {
+        "from": -1001616247897,
+        "to": -1002161322230,
+        "mediaGroup": False,
+    },
 }
 
 
@@ -13,9 +24,16 @@ group_comment_test = "test"
 group_comment_bankman = "Bankman"
 
 groups_to_comment = {
-    group_comment_test: {
+    CN_Signals: {
         "id": -1002194746912,
         "delay": 5,
     },
+    "Rektology": {
+        "id": -1002236146025,
+        "delay": 10,
+    },
+    "News": {
+        "id": -1002161322230,
+        "delay": 15,
+    },
 }
-    
