@@ -35,7 +35,7 @@ async def forward_message_channel(client: Client, message: Message):
 
             await asyncio.sleep(2)
 
-            send_comment_to_post(client, message)
+            await send_comment_to_post(client, message)
             c_c["mediaGroup"] = False
     else:
         message_new = await client.copy_message(
@@ -50,16 +50,20 @@ async def forward_message_channel(client: Client, message: Message):
                 text,
             )
 
-            send_comment_to_post(client, message)
+            await send_comment_to_post(client, message)
         except MessageNotModified as e:
             print(e)
 
 
 async def send_comment_to_post(client: Client, message: Message):
-    m = await client.get_discussion_message(message.chat.id, message.id)
-    logging.info(m)
-    # text = message.text if message.text else message.caption
-    # print(text)
-    # comments = gpt.generate_comments_by_post(text)
-    # await asyncio.sleep(groups_to_comment[group_comment_test]["delay"])
-    await m.reply("comment")
+    try:
+        m = await client.get_discussion_message(message.chat.id, message.id)
+        # logging.info(m)
+
+        # text = message.text if message.text else message.caption
+        # print(text)
+        # comments = gpt.generate_comments_by_post(text)
+        # await asyncio.sleep(groups_to_comment[group_comment_test]["delay"])
+        await m.reply("comment")
+    except Exception as e:
+        logging.error(e)
