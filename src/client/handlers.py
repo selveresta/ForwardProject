@@ -1,5 +1,5 @@
 import asyncio
-
+import logging
 from pyrogram import Client
 from channels.channels import (
     source_destination_channels_map as sdcm,
@@ -12,7 +12,7 @@ from pyrogram.errors.exceptions import MessageNotModified
 def get_current_from(message: Message):
     c_id = message.chat.id
     for k, v in sdcm.items():
-        if c_id in v["from"]:
+        if c_id == v["from"]:
             return v
 
     return None
@@ -20,11 +20,9 @@ def get_current_from(message: Message):
 
 async def forward_message_channel(client: Client, message: Message):
     c_c = get_current_from(message)
-
+    logging.info(message)
     if not c_c:
         return
-
-    print(c_c)
 
     if message.media_group_id:
         if not c_c["mediaGroup"]:
@@ -36,6 +34,8 @@ async def forward_message_channel(client: Client, message: Message):
             )
 
             await asyncio.sleep(2)
+
+            send_comment_to_post(client, message)
             c_c["mediaGroup"] = False
     else:
         message_new = await client.copy_message(
@@ -49,14 +49,15 @@ async def forward_message_channel(client: Client, message: Message):
                 message_new.id,
                 text,
             )
+
+            send_comment_to_post(client, message)
         except MessageNotModified as e:
             print(e)
 
 
 async def send_comment_to_post(client: Client, message: Message):
-    print(message)
     m = await client.get_discussion_message(message.chat.id, message.id)
-
+    logging.info(m)
     # text = message.text if message.text else message.caption
     # print(text)
     # comments = gpt.generate_comments_by_post(text)

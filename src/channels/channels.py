@@ -2,10 +2,10 @@ CN_Signals = "Signals"
 
 source_destination_channels_map = {
     CN_Signals: {
-        "from": -1002166434092,
+        "from": -1002247420892,
         "to": -1002244516241,
         "mediaGroup": False,
-        "user": 6229293964,
+        # "user": 6229293964,
     },
     "Rektology": {
         "from": -1002191626337,
@@ -20,12 +20,9 @@ source_destination_channels_map = {
 }
 
 
-group_comment_test = "test"
-group_comment_bankman = "Bankman"
-
 groups_to_comment = {
     CN_Signals: {
-        "id": -1002194746912,
+        "id": -1002244516241,
         "delay": 5,
     },
     "Rektology": {

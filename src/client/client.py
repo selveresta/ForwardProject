@@ -1,17 +1,11 @@
-import asyncio
 
 from pyrogram import Client
 from pyrogram import filters
-from config.config import API_HASH, API_ID, PHONE
 from channels.channels import (
     source_destination_channels_map as sdcm,
     groups_to_comment as gtc,
 )
 from pyrogram import Client
-from pyrogram.types import Message
-from deep_translator import GoogleTranslator
-from pyrogram.errors.exceptions import MessageNotModified
-from api.GPTClient import gpt
 from pyrogram.handlers import MessageHandler
 from .handlers import forward_message_channel, send_comment_to_post
 
@@ -32,7 +26,7 @@ class TelegramClient:
         ids = []
 
         for k, v in sdcm.items():
-            if v.get("from", None) and not v.get("users", None):
+            if v.get("from", None) and not v.get("user", None):
                 ids.append(v["from"])
         return ids
 
@@ -41,9 +35,9 @@ class TelegramClient:
         users = []
 
         for k, v in sdcm.items():
-            if v.get("from", None) and v.get("users", None):
+            if v.get("from", None) and v.get("user", None):
                 ids.append(v["from"])
-                users.append(v["users"])
+                users.append(v["user"])
         return [ids, users]
 
     def get_channels_to_comment(self):
@@ -61,6 +55,8 @@ class TelegramClient:
 
         comments_ids = self.get_channels_to_comment()
 
+        print(comments_ids)
+
         self.client.add_handler(
             MessageHandler(
                 forward_message_channel,
@@ -75,12 +71,12 @@ class TelegramClient:
             )
         )
 
-        self.client.add_handler(
-            MessageHandler(
-                send_comment_to_post,
-                filters=filters.chat(comments_ids),
-            )
-        )
+        # self.client.add_handler(
+        #     MessageHandler(
+        #         send_comment_to_post,
+        #         filters=filters.chat(comments_ids),
+        #     )
+        # )
 
 
 # @client.on_message(filters=filters.chat(channels[channel_name_Rektology][0]))
