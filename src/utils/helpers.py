@@ -1,5 +1,5 @@
 import random
-from consts import comments
+from .consts import comments
 
 
 def generate_random_comment():
