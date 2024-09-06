@@ -17,6 +17,11 @@ source_destination_channels_map = {
         "to": -1002161322230,
         "mediaGroup": False,
     },
+    "Test": {
+        "from": -1002202360303,
+        "to": -1002161322230,
+        "mediaGroup": False,
+    },
 }
 
 

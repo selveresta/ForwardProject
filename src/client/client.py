@@ -1,4 +1,4 @@
-
+import logging
 from pyrogram import Client
 from pyrogram import filters
 from channels.channels import (
@@ -8,19 +8,29 @@ from channels.channels import (
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 from .handlers import forward_message_channel, send_comment_to_post
+from pyrogram import idle
 
 
 class TelegramClient:
     client: Client
+    is_listener: bool
+    is_commentator: bool
 
-    def __init__(self, name, api_id, api_hash, phone_number):
+    def __init__(
+        self, name, api_id, api_hash, phone_number, is_listener, is_commentator
+    ):
         self.client = Client(
             name=name, api_id=api_id, api_hash=api_hash, phone_number=phone_number
         )
+        self.is_listener = is_listener
+        self.is_commentator = is_commentator
         self.register_client_handler()
 
     def start_client(self):
         self.client.run()
+
+    async def idle(self):
+        await idle()
 
     def get_channels_ids(self):
         ids = []
@@ -50,33 +60,36 @@ class TelegramClient:
         return ids
 
     def register_client_handler(self):
-        ids = self.get_channels_ids()
-        ids_users = self.get_channels_ids_from_user()
 
-        comments_ids = self.get_channels_to_comment()
+        if self.is_listener:
+            ids = self.get_channels_ids()
+            ids_users = self.get_channels_ids_from_user()
 
-        print(comments_ids)
-
-        self.client.add_handler(
-            MessageHandler(
-                forward_message_channel,
-                filters=filters.chat(ids),
+            self.client.add_handler(
+                MessageHandler(
+                    forward_message_channel,
+                    filters=filters.chat(ids_users[0]) & filters.user(ids_users[1]),
+                )
             )
-        )
 
-        self.client.add_handler(
-            MessageHandler(
-                forward_message_channel,
-                filters=filters.chat(ids_users[0]) & filters.user(ids_users[1]),
+            self.client.add_handler(
+                MessageHandler(
+                    forward_message_channel,
+                    filters=filters.chat(ids),
+                )
             )
-        )
 
-        # self.client.add_handler(
-        #     MessageHandler(
-        #         send_comment_to_post,
-        #         filters=filters.chat(comments_ids),
-        #     )
-        # )
+        if self.is_commentator:
+            comments_ids = self.get_channels_to_comment()
+
+            self.client.add_handler(
+                MessageHandler(
+                    send_comment_to_post,
+                    filters=filters.chat(comments_ids),
+                )
+            )
+
+        logging.info("Registered all handlers")
 
 
 # @client.on_message(filters=filters.chat(channels[channel_name_Rektology][0]))
