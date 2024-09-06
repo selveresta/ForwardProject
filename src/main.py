@@ -29,13 +29,37 @@ async def stop_clients():
     await client_commentator.client.stop()
 
 
-# Run the clients
-if __name__ == "__main__":
+def main():
     loop = asyncio.get_event_loop()
+
     try:
+        # Start clients and run event loop
         loop.run_until_complete(start_clients())
+        loop.run_forever()  # Keeps the loop running until interrupted
+
     except KeyboardInterrupt:
-        loop.run_until_complete(stop_clients())
+        print("KeyboardInterrupt received: Stopping clients...")
+        loop.run_until_complete(stop_clients())  # Stop clients gracefully
+    finally:
+        loop.close()  # Ensure loop is properly closed
+        print("Event loop closed")
+
+
+# # Run the clients
+
+# if __name__ == "__main__":
+#     try:
+#         asyncio.run(run_clients())  # This method automatically handles loop management
+#     except KeyboardInterrupt:
+#         print("Program interrupted")
+
+if __name__ == "__main__":
+    main()
+#     loop = asyncio.get_event_loop()
+#     try:
+#         loop.run_until_complete(start_clients())
+#     except KeyboardInterrupt:
+#         loop.run_until_complete(stop_clients())
 # asyncio.run(client.start_client())
 # asyncio.run(client_commentator.start_client())
 # loop = asyncio.get_event_loop()

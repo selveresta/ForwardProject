@@ -1,2 +1,3 @@
+It is using pyrogram by KurimuzonAkuma
 
-Herllo
+https://pyrodocs.kurimuzon.ru/intro/install/
