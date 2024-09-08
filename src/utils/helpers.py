@@ -14,6 +14,8 @@ def generate_random_comment():
 
     return comments[n]
 
+def get_phones_from_file(path):
+    pass
 
 async def forward_mediaGroup(c_c, client: Client, message: Message):
     if not c_c["mediaGroup"]:
