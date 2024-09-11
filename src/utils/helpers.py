@@ -17,6 +17,10 @@ def generate_random_comment():
 def get_phones_from_file(path):
     pass
 
+def check_if_user_subscribed(client: Client, channel: int):
+    pass
+
+
 async def forward_mediaGroup(c_c, client: Client, message: Message):
     if not c_c["mediaGroup"]:
         c_c["mediaGroup"] = True
