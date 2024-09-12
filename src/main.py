@@ -3,7 +3,7 @@ from threading import Thread
 from client.client import TelegramClient
 from config.config import API_HASH, API_ID, PHONE
 from utils.logger import create_logger
-
+from pyrogram import idle
 
 create_logger()
 
@@ -21,7 +21,8 @@ async def start_clients():
     print("Client 2 started")
 
     # Keep both clients running
-    await asyncio.gather(client.idle(), client_commentator.idle())
+    # await asyncio.gather(client.idle(), client_commentator.idle())
+    await idle()
 
 async def stop_clients():
     # Stop both clients
@@ -35,12 +36,10 @@ def main():
     try:
         # Start clients and run event loop
         loop.run_until_complete(start_clients())
-        loop.run_forever()  # Keeps the loop running until interrupted
-
-    except KeyboardInterrupt:
+        # loop.run_forever()  # Keeps the loop running until interrupted
+    finally:
         print("KeyboardInterrupt received: Stopping clients...")
         loop.run_until_complete(stop_clients())  # Stop clients gracefully
-    finally:
         loop.close()  # Ensure loop is properly closed
         print("Event loop closed")
 

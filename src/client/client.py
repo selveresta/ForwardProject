@@ -8,7 +8,7 @@ from channels.channels import (
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 from .handlers import forward_message_channel, send_comment_to_post
-from pyrogram import idle
+
 
 
 class TelegramClient:
@@ -74,7 +74,7 @@ class TelegramClient:
 
             self.client.add_handler(
                 MessageHandler(
-                    forward_message_channel
+                    forward_message_channel, filters=None
                 )
             )
 
