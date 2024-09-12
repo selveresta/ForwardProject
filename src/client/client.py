@@ -62,7 +62,7 @@ class TelegramClient:
     def register_client_handler(self):
 
         if self.is_listener:
-            ids = self.get_channels_ids()
+            # ids = self.get_channels_ids()
             # ids_users = self.get_channels_ids_from_user()
 
             # self.client.add_handler(
@@ -74,8 +74,7 @@ class TelegramClient:
 
             self.client.add_handler(
                 MessageHandler(
-                    forward_message_channel,
-                    filters=filters.chat(ids),
+                    forward_message_channel
                 )
             )
 
