@@ -14,8 +14,10 @@ def generate_random_comment():
 
     return comments[n]
 
+
 def get_phones_from_file(path):
     pass
+
 
 def check_if_user_subscribed(client: Client, channel: int):
     pass
@@ -24,7 +26,9 @@ def check_if_user_subscribed(client: Client, channel: int):
 async def forward_mediaGroup(c_c, client: Client, message: Message):
     if not c_c["mediaGroup"]:
         c_c["mediaGroup"] = True
-        mediagroup_with_entities = (await client.get_media_group(message.sender_chat.id, message.id)).pop()
+        mediagroup_with_entities = (
+            await client.get_media_group(message.sender_chat.id, message.id)
+        ).pop()
 
         message_new = (
             await client.copy_media_group(
@@ -36,7 +40,11 @@ async def forward_mediaGroup(c_c, client: Client, message: Message):
 
         # print(message_new)
 
-        text = mediagroup_with_entities.text if mediagroup_with_entities.text else mediagroup_with_entities.caption
+        text = (
+            mediagroup_with_entities.text
+            if mediagroup_with_entities.text
+            else mediagroup_with_entities.caption
+        )
         entities = (
             mediagroup_with_entities.entities
             if mediagroup_with_entities.entities
@@ -44,13 +52,15 @@ async def forward_mediaGroup(c_c, client: Client, message: Message):
         )
         try:
             await client.edit_message_caption(
-                c_c["to"],
-                message_new.id,
-                text,
+                chat_id=c_c["to"],
+                message_id=message_new.id,
+                caption=text,
                 caption_entities=entities,
             )
         except MessageNotModified as e:
-            print(f"Error - {e}")
+            print(f"Error - {str(e)}")
+        except Exception as standart:
+            print(f"Error - {str(standart)}")
 
         await asyncio.sleep(2)
         c_c["mediaGroup"] = False
@@ -67,10 +77,12 @@ async def forward_message(c_c, client: Client, message: Message):
     )
     try:
         await client.edit_message_caption(
-            c_c["to"],
-            message_new.id,
-            text,
+            chat_id=c_c["to"],
+            message_id=message_new.id,
+            caption=text,
             caption_entities=entities,
         )
     except MessageNotModified as e:
         print(f"Error - {e}")
+    except Exception as standart:
+        print(f"Error - {str(standart)}")

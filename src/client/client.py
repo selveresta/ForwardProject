@@ -26,12 +26,6 @@ class TelegramClient:
         self.is_commentator = is_commentator
         self.register_client_handler()
 
-    def start_client(self):
-        self.client.run()
-
-    async def idle(self):
-        await idle()
-
     def get_channels_ids(self):
         ids = []
 
