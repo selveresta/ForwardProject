@@ -14,3 +14,4 @@ venv.bak/
 /bin
 /accounts
 *.rar
+.vscode

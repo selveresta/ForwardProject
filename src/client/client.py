@@ -7,12 +7,14 @@ from channels.channels import (
 )
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
-from .handlers import forward_message_channel, send_comment_to_post
+from .handlers import forward_message_channel, forward_message_channel1, send_comment_to_post
 from pyrogram import idle
+from telethon import events, TelegramClient as TG
 
 
-class TelegramClient:
+class CustomTelegramClient:
     client: Client
+    client1: TG
     is_listener: bool
     is_commentator: bool
 
@@ -21,6 +23,11 @@ class TelegramClient:
     ):
         self.client = Client(
             name=name, api_id=api_id, api_hash=api_hash, phone_number=phone_number
+        )
+        self.client1 = TG(
+            session=name + "1",
+            api_id=api_id,
+            api_hash=api_hash,
         )
         self.is_listener = is_listener
         self.is_commentator = is_commentator
@@ -72,11 +79,15 @@ class TelegramClient:
             #     )
             # )
 
-            self.client.add_handler(
-                MessageHandler(
-                    forward_message_channel,
-                    filters=filters.chat(ids),
-                )
+            # self.client.add_handler(
+            #     MessageHandler(
+            #         forward_message_channel,
+            #         filters=filters.chat(ids),
+            #     )
+            # )
+            self.client1.add_event_handler(
+                forward_message_channel1,
+                event=events.NewMessage(ids),
             )
 
         if self.is_commentator:

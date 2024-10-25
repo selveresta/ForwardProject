@@ -18,8 +18,28 @@ source_destination_channels_map = {
         "mediaGroup": False,
     },
     "Test": {
-        "from": -1002202360303,
-        "to": -1002161322230,
+        "from": -1002161322230,
+        "to": -1001616247897,
+        "mediaGroup": False,
+    },
+}
+
+
+source_destination_channels_map_test = {
+    CN_Signals: {
+        "from": -1002244516241,
+        "to": -1002202360303,
+        "mediaGroup": False,
+        # "user": 6229293964,
+    },
+    "Rektology": {
+        "from": -1002236146025,
+        "to": -1002202360303,
+        "mediaGroup": False,
+    },
+    "News": {
+        "from": -1002161322230,
+        "to": -1002202360303,
         "mediaGroup": False,
     },
 }

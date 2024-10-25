@@ -5,3 +5,5 @@ pandas
 xlsxwriter
 deep-translator
 openai
+telethon
+python-abc
