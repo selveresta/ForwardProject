@@ -124,7 +124,10 @@ from pyrogram import idle
 from channels.channels import (
     source_destination_channels_map as sdcm,
 )
+from utils.logger import create_logger
 
+
+create_logger()
 
 async def main():
     # Pyrogram configuration

@@ -11,7 +11,7 @@ from channels.channels import (
 from pyrogram.errors.exceptions import MessageNotModified
 from telethon.tl.custom import Message as TMessage
 
-
+import logging
 class ClientType(Enum):
     Pyrogram = "P"
     Telethon = "T"
@@ -71,7 +71,7 @@ class PyrogramClient(TelegramClientBase):
         Starts the Pyrogram client in an async loop.
         """
         await self.client.start()
-        print("Pyrogram Client Running...")
+        logging.info("Pyrogram Client Running...")
 
         # Keep the bot running asynchronously
         # await idle()  # Keeps the bot alive until interrupted
@@ -155,7 +155,7 @@ class TelethonClient(TelegramClientBase):
         Starts the Telethon client in an async loop.
         """
         await self.client.start()
-        print("Telethon Client Running...")
+        logging.info("Telethon Client Running...")
 
         # Keep the client running in a loop
         await self.client.run_until_disconnected()  # Keeps the client alive until disconnected
