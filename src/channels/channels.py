@@ -2,7 +2,7 @@ CN_Signals = "Signals"
 
 source_destination_channels_map = {
     CN_Signals: {
-        "from": -1002247420892,
+        "from": -1001742512586,
         "to": -1002244516241,
         "mediaGroup": False,
         # "user": 6229293964,
@@ -14,32 +14,12 @@ source_destination_channels_map = {
     },
     "News": {
         "from": -1001616247897,
-        "to": -1002161322230,
+        "to": -1002236146025,
         "mediaGroup": False,
     },
     "Test": {
-        "from": -1002161322230,
-        "to": -1001616247897,
-        "mediaGroup": False,
-    },
-}
-
-
-source_destination_channels_map_test = {
-    CN_Signals: {
-        "from": -1002244516241,
-        "to": -1002202360303,
-        "mediaGroup": False,
-        # "user": 6229293964,
-    },
-    "Rektology": {
         "from": -1002236146025,
-        "to": -1002202360303,
-        "mediaGroup": False,
-    },
-    "News": {
-        "from": -1002161322230,
-        "to": -1002202360303,
+        "to": -1001616247897,
         "mediaGroup": False,
     },
 }

@@ -37,14 +37,15 @@ class MessageForwarder:
         @self.telethon_client.client.on(events.NewMessage())
         async def handler(event: events.NewMessage.Event):
             message: Message = event.message  # Extract the message object
-            logging.info(f"New message in group {message.chat_id}: {message.text}")
 
             message = event.message
             c_c = self.get_current_from(message)
 
             if not c_c:
-                logging.error("Not valid chanell")
+                logging.error(f"Not valid chanell - {message.chat_id} - {c_c}")
                 return
+
+            logging.info(f"New message in group {message.chat_id}: {message.text}")
 
             # Use Pyrogram to copy the message to the destination chat
             await self.copy_message_to_destination(message, c_c)
