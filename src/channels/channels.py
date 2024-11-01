@@ -14,12 +14,12 @@ source_destination_channels_map = {
     },
     "News": {
         "from": -1001616247897,
-        "to": -1002236146025,
+        "to": -1002161322230,
         "mediaGroup": False,
     },
     "Test": {
         "from": -1002236146025,
-        "to": -1001616247897,
+        "to": -1002202360303,
         "mediaGroup": False,
     },
 }

@@ -9,6 +9,7 @@ from channels.channels import (
     source_destination_channels_map as sdcm,
 )
 import logging
+import asyncio
 
 
 class MessageForwarder:
@@ -42,25 +43,42 @@ class MessageForwarder:
             c_c = self.get_current_from(message)
 
             if not c_c:
-                logging.error(f"Not valid chanell - {message.chat_id} - {c_c}")
+                logging.error(f"Chat ID - {message.chat_id}; Found channel - {c_c}")
                 return
 
             logging.info(f"New message in group {message.chat_id}: {message.text}")
 
+            if c_c["mediaGroup"]:
+                return
             # Use Pyrogram to copy the message to the destination chat
-            await self.copy_message_to_destination(message, c_c)
+            await self.copy_message_to_destination(
+                message, c_c, True if message.grouped_id else False
+            )
 
-    async def copy_message_to_destination(self, message: Message, c_c):
+    async def copy_message_to_destination(self, message: Message, c_c, isMG: bool):
         """
         Copies the message from the Telethon client to the destination chat using Pyrogram.
         """
 
         try:
-            await self.pyrogram_client.client.copy_message(
-                chat_id=c_c["to"],  # Destination chat
-                from_chat_id=message.chat_id,  # Source chat ID
-                message_id=message.id,  # Message ID to copy
-            )
+
+            if isMG:
+                c_c["mediaGroup"] = True
+                await self.pyrogram_client.client.copy_media_group(
+                    chat_id=c_c["to"],  # Destination chat
+                    from_chat_id=message.chat_id,  # Source chat ID
+                    message_id=message.id,  # Message ID to copy
+                )
+
+                await asyncio.sleep(3)
+                c_c["mediaGroup"] = False
+            else:
+                await self.pyrogram_client.client.copy_message(
+                    chat_id=c_c["to"],  # Destination chat
+                    from_chat_id=message.chat_id,  # Source chat ID
+                    message_id=message.id,  # Message ID to copy
+                )
+
             logging.info(
                 f"Message copied successfully from {message.chat_id} to {self.destination_chat_id}"
             )
