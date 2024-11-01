@@ -65,18 +65,18 @@ class MessageForwarder:
             if isMG:
                 c_c["mediaGroup"] = True
                 await self.pyrogram_client.client.copy_media_group(
-                    chat_id=c_c["to"],  # Destination chat
-                    from_chat_id=message.chat_id,  # Source chat ID
-                    message_id=message.id,  # Message ID to copy
+                    chat_id=int(c_c["to"]),  # Destination chat
+                    from_chat_id=int(message.chat_id),  # Source chat ID
+                    message_id=int(message.id),  # Message ID to copy
                 )
 
                 await asyncio.sleep(3)
                 c_c["mediaGroup"] = False
             else:
                 await self.pyrogram_client.client.copy_message(
-                    chat_id=c_c["to"],  # Destination chat
-                    from_chat_id=message.chat_id,  # Source chat ID
-                    message_id=message.id,  # Message ID to copy
+                    chat_id=int(c_c["to"]),  # Destination chat
+                    from_chat_id=int(message.chat_id),  # Source chat ID
+                    message_id=int(message.id),  # Message ID to copy
                 )
 
             logging.info(
